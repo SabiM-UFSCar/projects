@@ -1,2 +1,7 @@
-# projects
-Repository hosting computational scripts, analysis tools, and simulation programs developed for research publications by the SabiM group. Supports reproducibility, transparency, and open science practices.
+# SAbiM - Projects 
+
+## 2025
+
+### "Bridging Text Mining and Quantum Simulations for the Design of 2D Monochalcogenide Materials"
+
+B. P. Querne, Mateus; Machado, Marco; Prati, Ronaldo; Moreira Regis, Natan; Lima, Matheus P.; Da Silva, Juarez
