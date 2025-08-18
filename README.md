@@ -7,4 +7,4 @@
 <br />
 <h7>Submitted</h7>
 
-[Scripts and Programs](https://github.com/SabiM-UFSCar/projects/tree/cf18ecc86f8374860456a8a1430643cfd12a5f80/2025-2D-Monochalcogenide)
+[Scripts and Programs](2025-2D-Monochalcogenide)
