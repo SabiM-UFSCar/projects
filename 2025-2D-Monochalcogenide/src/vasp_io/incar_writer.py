@@ -13,7 +13,7 @@ import mmap
 from pathlib import Path
 from utils import logger, log_generate_inputs, return_data_formatted_titel
 
-PATH_FOLDER_POTPAW = Path("/home/murbach/Documents/UResearch/AbInitioArchives/PotPaw/potpaw_PBE_5_4_2020_01_15")
+PATH_FOLDER_POTPAW = Path("potpaw_folder")
 LIST_POTCAR_D_GW = ['Sn', 'In']
 RATIO_FACTOR = 2.0
 INCAR_FILE_TEMPLATE = Path("./vasp_templates/INCAR_PATTERN")
