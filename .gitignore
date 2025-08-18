@@ -10,5 +10,6 @@
 .vscode/
 .idea/
 
-/home/murbach/Documents/UResearch/SAbiM-Group/GitHub-Projects/projects/2025-2D-Monochalcogenide/src/vasp_io/vasp_templates/POSCAR/
-/home/murbach/Documents/UResearch/SAbiM-Group/GitHub-Projects/projects/2025-2D-Monochalcogenide/src/vasp_io/vasp_templates/INCAR_PATTERN
+2025-2D-Monochalcogenide/src/vasp_io/vasp_templates/POSCAR/
+2025-2D-Monochalcogenide/src/vasp_io/vasp_templates/INCAR_PATTERN
+2025-2D-Monochalcogenide/src/vasp_io/vasp_templates/INCAR_PATTERN
