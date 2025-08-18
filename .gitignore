@@ -12,4 +12,6 @@
 
 2025-2D-Monochalcogenide/src/vasp_io/vasp_templates/POSCAR/
 2025-2D-Monochalcogenide/src/vasp_io/vasp_templates/INCAR_PATTERN
-2025-2D-Monochalcogenide/src/vasp_io/vasp_templates/INCAR_PATTERN
+2025-2D-Monochalcogenide/src/vasp_io/__pycache__/incar_writer.cpython-313.pyc
+2025-2D-Monochalcogenide/src/vasp_io/__pycache__/poscar_writer.cpython-313.pyc
+2025-2D-Monochalcogenide/src/vasp_io/__pycache__/utils.cpython-313.pyc
