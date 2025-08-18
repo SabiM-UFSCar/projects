@@ -103,16 +103,49 @@ def run_write_poscar(path_output_folder: str, list_elements: list, space_group: 
 
 @log_generate_inputs
 def read_poscar_vectors(path_poscar: Path):
+    """Reads lattice vectors and scaling parameters from a VASP POSCAR file.
+
+    This function extracts critical structural parameters from the first 5 lines of a 
+    POSCAR file, including the comment line, scaling factor, and lattice vectors.
+
+    Args:
+        path_poscar: Path object pointing to the POSCAR file.
+
+    Returns:
+        tuple: Contains five elements:
+            - cflat (str): First line comment/description from POSCAR.
+            - scale (np.float64): Universal scaling factor for lattice vectors.
+            - a1 (np.ndarray): First lattice vector as float64 numpy array.
+            - a2 (np.ndarray): Second lattice vector as float64 numpy array.
+            - a3 (np.ndarray): Third lattice vector as float64 numpy array.
+
+    Raises:
+        FileNotFoundError: If specified POSCAR file doesn't exist.
+        ValueError: If any parsing error occurs during file reading.
+
+    Example:
+        >>> from pathlib import Path
+        >>> comment, scale, v1, v2, v3 = read_poscar_vectors(Path("POSCAR"))
+    """
+    # Validate file existence before processing to fail fast on missing inputs
     if not path_poscar.exists():
         raise FileNotFoundError(f"POSCAR file not found at {path_poscar.resolve()}")
     
+    # Context manager ensures proper file handling and automatic cleanup
     with path_poscar.open(encoding='utf-8') as file:
         try:
+            # Read header comment (often contains structural info)
             cflat = file.readline().strip()
+            
+            # Parse universal scaling factor for lattice vectors
             scale = np.float64(file.readline().strip())
+            
+            # Extract and convert lattice vectors (next 3 lines) to float arrays
             a1 = np.array(file.readline().strip().split(), dtype=np.float64)
             a2 = np.array(file.readline().strip().split(), dtype=np.float64)
             a3 = np.array(file.readline().strip().split(), dtype=np.float64)
             return cflat, scale, a1, a2, a3
+            
+        # Wrap low-level errors with context about parsing failure
         except Exception as e:
             raise ValueError(f"Error reading POSCAR vectors: {str(e)}") from e
