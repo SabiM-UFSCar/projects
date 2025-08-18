@@ -1,6 +1,8 @@
 # Ignora arquivos temporários
 *.tmp
 *.log
+__pycache__/
+*.py[cod]
 
 # Ignora arquivos de configuração local (ex: .env)
 .env
