@@ -12,5 +12,11 @@ __pycache__/
 .vscode/
 .idea/
 
-2025-2D-Monochalcogenide/src/vasp_io/vasp_templates/POSCAR/
-2025-2D-Monochalcogenide/src/vasp_io/vasp_templates/INCAR_PATTERN
+# Ignora arquivos de saída do VASP
+2025-2D-Monochalcogenide/src/vasp_io/vasp_templates
+2025-2D-Monochalcogenide/src/vasp_io/vasp_outputs
+2025-2D-Monochalcogenide/src/vasp_io/docs
+2025-2D-Monochalcogenide/src/vasp_io/logs
+
+# Ignora Shells Bach
+*.sh

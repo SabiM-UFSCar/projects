@@ -87,4 +87,4 @@ def run_generate_inputs(path_output_folder: str):
 
 # Execute the script
 # Entry point: Generates all inputs under './vasp_outputs' directory
-run_generate_inputs("./vasp_outputs")
+# run_generate_inputs("./vasp_outputs")
