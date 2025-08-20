@@ -17,6 +17,7 @@ __pycache__/
 2025-2D-Monochalcogenide/src/vasp_io/vasp_outputs
 2025-2D-Monochalcogenide/src/vasp_io/docs
 2025-2D-Monochalcogenide/src/vasp_io/logs
+2025-2D-Monochalcogenide/src/vasp_data_extractor/run_data.py
 
 # Ignora Shells Bach
 *.sh
