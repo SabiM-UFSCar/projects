@@ -1,4 +1,4 @@
-# vasp_io/incar_writer.py
+# vasp_init/incar_writer.py
 """
 Simulações Ab-initio de Materiais - SAbiM
 ====================

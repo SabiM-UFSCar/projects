@@ -1,4 +1,4 @@
-# vasp_io/config.py
+# vasp_init/config.py
 """
 Simulações Ab-initio de Materiais - SAbiM
 ====================

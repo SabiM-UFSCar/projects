@@ -1,4 +1,4 @@
-# vasp_io/vasp_setup.py
+# vasp_init/vasp_setup.py
 """
 Simulações Ab-initio de Materiais - SAbiM
 ====================
@@ -84,7 +84,3 @@ def run_generate_inputs(path_output_folder: str):
             logger.info(f"Completed input generation for {mq} in space group {sp}. Total systems: {system_count}")
             logger.info("#########################################################################################")
 
-
-# Execute the script
-# Entry point: Generates all inputs under './vasp_outputs' directory
-# run_generate_inputs("./vasp_outputs")

@@ -13,10 +13,10 @@ __pycache__/
 .idea/
 
 # Ignora arquivos de saída do VASP
-2025-2D-Monochalcogenide/src/vasp_io/vasp_templates
-2025-2D-Monochalcogenide/src/vasp_io/vasp_outputs
-2025-2D-Monochalcogenide/src/vasp_io/docs
-2025-2D-Monochalcogenide/src/vasp_io/logs
+2025-2D-Monochalcogenide/src/vasp_init/vasp_templates
+2025-2D-Monochalcogenide/src/vasp_init/vasp_outputs
+2025-2D-Monochalcogenide/src/vasp_init/docs
+2025-2D-Monochalcogenide/src/vasp_init/logs
 2025-2D-Monochalcogenide/src/vasp_data_extractor/run_data.py
 2025-2D-Monochalcogenide/src/vasp_builder/logs
 2025-2D-Monochalcogenide/src/vasp_builder/outputs

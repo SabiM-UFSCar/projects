@@ -1,4 +1,4 @@
-# vasp_io/poscar_write.py
+# vasp_init/poscar_write.py
 """
 Simulações Ab-initio de Materiais - SAbiM
 ====================

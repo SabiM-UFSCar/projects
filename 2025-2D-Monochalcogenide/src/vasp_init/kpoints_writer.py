@@ -1,4 +1,4 @@
-# vasp_io/kpoints_write.py
+# vasp_init/kpoints_write.py
 """
 Simulações Ab-initio de Materiais - SAbiM
 ====================
