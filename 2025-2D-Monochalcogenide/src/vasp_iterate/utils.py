@@ -1,4 +1,4 @@
-# vasp_builder/utils.py
+# vasp_iterate/utils.py
 """
 Simulações Ab-initio de Materiais - SAbiM
 ====================

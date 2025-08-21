@@ -1,4 +1,4 @@
-# vasp_builder/bc_builder.py
+# vasp_iterate/bc_builder.py
 """
 Simulações Ab-initio de Materiais - SAbiM
 ====================
