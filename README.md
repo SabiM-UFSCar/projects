@@ -1,10 +1,12 @@
-# SAbiM - Projects 
+# SAbiM - Research Scripts
 
+This repository contains the codes, scripts, and tools used in research projects developed by SAbiM-UFSCar. Each folder or file is linked to a specific study or publication, ensuring transparency and reproducibility of results.
 
-## 2025
-<h4>Bridging Text Mining and Quantum Simulations for the Design of 2D Monochalcogenide Materials</h4>
-</h6>B. P. Querne, Mateus; Machado, Marco; Prati, Ronaldo; Moreira Regis, Natan; Lima, Matheus P.; Da Silva, Juarez.</h6>
-<br />
-<h7>Submitted</h7>
+## Corresponding Publications
+The following works are associated with this repository:
 
-[Scripts and Programs](2025-2D-Monochalcogenide)
+### 🗓 2025
+🔍 **Bridging Text Mining and Quantum Simulations for the Design of 2D Monochalcogenide Materials**  
+👥 *Authors*: Mateus B. P. Querne, Marco A. M. T. Machado, Ronaldo C. Prati, Natan M. Regis, Matheus P. Lima, and Juarez L. F. Da Silva  
+🏷 *Journal *  
+🔗 [DOI](https://www.doi.org/) | 💾 [Scripts and Programs](2025-2D-Monochalcogenide)
