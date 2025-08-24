@@ -10,15 +10,15 @@ Date: 08/2024
 """
 
 from pathlib import Path
-from utils import get_mq_elements, logger, log_generate_inputs, progress_bar_show
-from poscar_writer import run_write_poscar
 from incar_writer import run_write_incar
 from kpoints_writer import run_kpoints_writer
-from config import LIST_SP, LIST_MQ
+from poscar_writer import run_write_poscar
+from Monochalcogenides2D.common.config import PATH_FOLDER_OUTPUT, LIST_MQ, LIST_SP
+from Monochalcogenides2D.common.utils import init_logger, task_generate_log, progress_bar_show, get_mq_elements
 
 
-@log_generate_inputs
-def run_generate_inputs(path_output_folder: str):
+@task_generate_log
+def run_generate_inputs(name_output_folder: str):
     """Orchestrates VASP input generation for multiple space groups and material systems.
 
     Creates nested directory structure and generates POSCAR/INCAR files
@@ -26,7 +26,7 @@ def run_generate_inputs(path_output_folder: str):
     Serves as the top-level workflow controller for input file generation.
 
     Args:
-        path_output_folder: Root directory for output file hierarchy
+        name_output_folder: Name for directory for output file hierarchy
 
     Returns:
         None (writes files to disk)
@@ -41,11 +41,11 @@ def run_generate_inputs(path_output_folder: str):
     """
     # Initialize root output directory with safe creation
     # Critical: Ensures base path exists before nested generation
-    path_output = Path(path_output_folder)
+    path_output = PATH_FOLDER_OUTPUT.joinpath(name_output_folder)
     path_output.mkdir(parents=True, exist_ok=True)
-    
-    logger.info(f"Output directory set to: {path_output.resolve()}")
-    
+
+    logger.info(f"Output directory set to: {path_output.resolve()}\n")
+
     system_count = 0
     progress_bar_show(system_count)
     # Process each space group in predefined list
@@ -70,7 +70,7 @@ def run_generate_inputs(path_output_folder: str):
             else:
                 logger.info(f"Failed to create POSCAR file for {mq} in space group {sp}.")
                 raise RuntimeError(f"POSCAR generation failed for {mq} in space group {sp}.")
-     
+
             # Generate matching INCAR file with material-specific parameters
             # Critical: Must run after POSCAR for folder structure consistency
             run_write_incar(path_output_sp, get_mq_elements(mq))
@@ -81,6 +81,12 @@ def run_generate_inputs(path_output_folder: str):
 
             system_count += 1
             progress_bar_show(system_count)
-            logger.info(f"Completed input generation for {mq} in space group {sp}. Total systems: {system_count}")
-            logger.info("#########################################################################################")
+            logger.info(f"Completed input generation for {mq} in space group {sp}. Total systems: {system_count}\n\n")
 
+
+
+if __name__ == "__main__":
+    logger = init_logger(task_name = "VASP_SETUP", level = "INFO")
+    run_generate_inputs("vasp_simulations")
+else:
+    from loguru import logger

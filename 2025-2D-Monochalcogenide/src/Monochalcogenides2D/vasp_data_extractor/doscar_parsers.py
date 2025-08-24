@@ -10,8 +10,10 @@ Date: 08/2024
 """
 
 import os
+
 import numpy as np
-from poscar_parsers  import ReadPOSCAR as read_poscar
+
+from poscar_parsers import ReadPOSCAR
 
 
 def read_doscar(doscar_file):
@@ -71,7 +73,7 @@ def read_doscar(doscar_file):
 
         # Read POSCAR to get ion counts for parsing atom-resolved DOS
         poscar = os.path.join(_SIM_FOLDER_PATH, 'POSCAR')
-        poscar_obj = read_poscar(poscar)
+        poscar_obj = ReadPOSCAR(poscar)
         POSCAR_IONS_PER_SPECIES = poscar_obj.get_ions()
         POSCAR_TOTAL_IONS = poscar_obj.get_total_species()
 

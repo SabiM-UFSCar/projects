@@ -10,6 +10,7 @@ Date: 08/2024
 """
 
 import os
+
 import numpy as np
 from ase import Atom, Atoms
 

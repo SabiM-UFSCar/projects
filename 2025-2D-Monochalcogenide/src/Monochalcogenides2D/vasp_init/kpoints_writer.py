@@ -9,12 +9,15 @@ Email: murbach@df.ufscar.br
 Date: 08/2024
 """
 from pathlib import Path
-import numpy as np
-from poscar_writer import read_poscar_vectors
-from config import RKFACTOR
-from utils import logger, log_generate_inputs
 
-@log_generate_inputs
+import numpy as np
+from Monochalcogenides2D.common.config import RK_FACTOR
+
+from poscar_writer import read_poscar_vectors
+from Monochalcogenides2D.common.utils import init_logger, task_generate_log
+
+
+@task_generate_log
 def run_kpoints_writer(path_output: Path):
     """Generates and writes a VASP KPOINTS file for 2D system calculations.
 
@@ -32,7 +35,7 @@ def run_kpoints_writer(path_output: Path):
         Depends on:
         - read_poscar_vectors() for lattice extraction
         - rkmesh2d() for k-point grid calculation
-        - Global RKFACTOR for mesh density control
+        - Global RK_FACTOR for mesh density control
         - logger for status reporting
     """
 
@@ -40,13 +43,13 @@ def run_kpoints_writer(path_output: Path):
 
     # Extract lattice parameters from POSCAR: flat cell flag, scaling factor, and vectors
     _, scale, a1, a2, a3 = read_poscar_vectors(path_poscar)
-    
+
     # Construct 3x3 real-space lattice matrix for reciprocal space calculations
     rlattice = np.array([a1.tolist(), a2.tolist(), a3.tolist()])
-    
+
     # Compute optimal k-point grid dimensions for 2D system
-    # RKFACTOR controls density, scale adjusts lattice dimensions
-    ngrid = rkmesh2d(RKFACTOR, rlattice, scale)
+    # RK_FACTOR controls density, scale adjusts lattice dimensions
+    ngrid = rkmesh2d(RK_FACTOR, rlattice, scale)
 
     # Build KPOINTS file content following VASP format specifications:
     # Line 1: Comment
@@ -61,13 +64,14 @@ def run_kpoints_writer(path_output: Path):
         f"{str(ngrid[0])} {str(ngrid[1])} {str(ngrid[2])}",  # Grid dimensions
         "0  0  0",  # Zero offset for grid
     ]
-    
+
     # Resolve output path and write file
     path_kpoints_file = Path(path_output).joinpath("KPOINTS")
     path_kpoints_file.write_text('\n'.join(kpoints_content), encoding='utf-8')
-    
+
     # Confirm file creation in logs
     logger.info(f"KPOINTS file written to {path_kpoints_file.resolve()}")
+
 
 def rkmesh2d(rk, rlat, ifactor):
     """Computes a 2D k-point mesh grid for Brillouin zone sampling.
@@ -137,13 +141,14 @@ def prodvec(v1, v2):
     """
     # Initialize output vector
     vx = np.zeros(3, dtype=np.float64)
-    
+
     # Cross product components (right-hand rule)
     vx[0] = (v1[1] * v2[2]) - (v1[2] * v2[1])  # x-component: y1z2 - z1y2
     vx[1] = (v1[2] * v2[0]) - (v1[0] * v2[2])  # y-component: z1x2 - x1z2
     vx[2] = (v1[0] * v2[1]) - (v1[1] * v2[0])  # z-component: x1y2 - y1x2
 
     return vx
+
 
 def recvec(rlat1, rlat2, rlat3):
     """Computes reciprocal lattice vectors from three real-space lattice vectors.
@@ -205,3 +210,9 @@ def vecsize(vec):
     # Calculate vector magnitude using Euclidean norm formula
     vsize = np.sqrt(vec[0] ** 2 + vec[1] ** 2 + vec[2] ** 2)
     return vsize
+
+
+if __name__ == "__main__":
+    logger = init_logger(task_name="KPOINTS_INIT_WRITE", level="INFO")
+else:
+    from loguru import logger

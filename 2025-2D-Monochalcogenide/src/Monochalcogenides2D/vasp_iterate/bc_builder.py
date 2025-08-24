@@ -9,14 +9,15 @@ Email: murbach@df.ufscar.br
 Date: 08/2024
 """
 
-from pathlib import Path
 import shutil
-from ..vasp_data_extractor import incar_parsers, outcar_parsers
-from config import LIST_MQ, LIST_SP, TOTAL_MQ_SYSTEMS, LIST_ORDERED_BC_TAGS
-from utils import logger, log_generate_inputs, progress_bar_show, order_dict_by_list
+from pathlib import Path
+from Monochalcogenides2D.common.config import LIST_MQ, LIST_SP, LIST_ORDERED_BC_TAGS, PATH_FOLDER_OUTPUT
+from Monochalcogenides2D.common.utils import init_logger, task_generate_log, progress_bar_show, order_dict_by_list
+from Monochalcogenides2D.vasp_data_extractor import incar_parsers, outcar_parsers
 
-@log_generate_inputs
-def generate_bader_input_files(path_input_base: Path, path_output_bc: Path):
+
+@task_generate_log
+def generate_bader_input_files(path_input_base: Path, name_output_bc: str):
     """
     Generates Bader charge analysis input files from VASP outputs for multiple material systems.
 
@@ -28,7 +29,7 @@ def generate_bader_input_files(path_input_base: Path, path_output_bc: Path):
 
     Args:
         path_input_base (Path): Base directory containing source VASP files organized as /material/space_group/
-        path_output_bc (Path): Target directory where Bader input files will be organized as /space_group/material/
+        name_output_bc (str): Name of directory where Bader input files will be organized as /space_group/material/
 
     Raises:
         FileNotFoundError: If source directory for specific material/space group is missing
@@ -38,6 +39,9 @@ def generate_bader_input_files(path_input_base: Path, path_output_bc: Path):
         Requires predefined LIST_MQ (materials) and LIST_SP (space groups) lists
         Depends on external functions: outcar_parsers.get_number_grid, update_incar_bc, progress_bar_show
     """
+
+    path_output_bc = PATH_FOLDER_OUTPUT.joinpath(name_output_bc)
+
     system_count = 0
     progress_bar_show(system_count)
     for mq in LIST_MQ:
@@ -54,7 +58,6 @@ def generate_bader_input_files(path_input_base: Path, path_output_bc: Path):
             path_output_sp.mkdir(parents=True, exist_ok=True)
             
             path_bc_sp = path_bc.joinpath(sp)
-            logger.info("#########################################################################################")
             logger.info(f"Processing space group: {sp} with material: {mq}")
 
             if path_bc_sp.is_dir():
@@ -79,8 +82,7 @@ def generate_bader_input_files(path_input_base: Path, path_output_bc: Path):
             # Log progress and update system count
             system_count += 1
             progress_bar_show(system_count)
-            logger.info(f"Completed input generation for {mq} in space group {sp}. Total systems: {system_count}")
-            logger.info("#########################################################################################")
+            logger.info(f"Completed input generation for {mq} in space group {sp}. Total systems: {system_count}\n\n")
         
 
 def update_incar_bc(path_incar: Path, system_description: str, number_of_grid: list[int]):
@@ -118,3 +120,8 @@ def update_incar_bc(path_incar: Path, system_description: str, number_of_grid: l
         incar_file.write(bc_incar_flags)
 
 
+
+if __name__ == "__main__":
+    logger = init_logger(task_name = "BADER_CHARGE", level = "INFO")
+else:
+    from loguru import logger

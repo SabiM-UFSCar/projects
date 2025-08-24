@@ -9,14 +9,17 @@ Email: murbach@df.ufscar.br
 Date: 08/2024
 """
 
-import re
 import mmap
+import re
 from pathlib import Path
-from utils import logger, log_generate_inputs, return_data_formatted_titel
-from config import (INCAR_FILE_TEMPLATE, PATH_FOLDER_POTPAW,
-                    LIST_POTCAR_D_GW, RATIO_FACTOR)
 
-@log_generate_inputs
+from Monochalcogenides2D.common.config import (PATH_FILE_INCAR_PATTERN, PATH_FOLDER_POTPAW,
+                    LIST_ELEMENT_POTCAR_D_GW, RATIO_FACTOR)
+
+from Monochalcogenides2D.common.utils import task_generate_log, return_data_formatted_titel, init_logger
+
+
+@task_generate_log
 def run_write_incar(folder_output: Path, mq: list):
     """Generates VASP INCAR and POTCAR files for a binary material system.
 
@@ -64,7 +67,7 @@ def run_write_incar(folder_output: Path, mq: list):
         incar_encut = enmax_m * RATIO_FACTOR
 
     # Load template INCAR file lines for modification
-    incar_template = INCAR_FILE_TEMPLATE.read_text(encoding='utf-8').splitlines()
+    incar_template = PATH_FILE_INCAR_PATTERN.read_text(encoding='utf-8').splitlines()
     
     # Combine POTCAR contents and write to output file
     # Order matters: First element (M) then second element (Q)
@@ -93,7 +96,7 @@ def run_write_incar(folder_output: Path, mq: list):
     incar_output.write_text('\n'.join(cleaned_lines_incar), encoding='utf-8')
     logger.info(f"INCAR file written to {incar_output.resolve()}")
 
-@log_generate_inputs
+@task_generate_log
 def potpaw_folder_for_element(element: str) -> Path:
     """Finds the appropriate POTCAR folder path for a given element.
 
@@ -124,8 +127,8 @@ def potpaw_folder_for_element(element: str) -> Path:
     folder_element_name = f"{element}_GW"
 
     # Special handling for elements requiring d-electron treatment
-    # Note: LIST_POTCAR_D_GW contains elements needing '_d_GW' suffix
-    if element in LIST_POTCAR_D_GW:
+    # Note: LIST_ELEMENT_POTCAR_D_GW contains elements needing '_d_GW' suffix
+    if element in LIST_ELEMENT_POTCAR_D_GW:
         folder_element_name = f"{element}_d_GW"
 
     # Verify the determined folder exists in available directories
@@ -134,7 +137,7 @@ def potpaw_folder_for_element(element: str) -> Path:
         return PATH_FOLDER_POTPAW.joinpath(folder_element_name, "POTCAR")
 
 
-@log_generate_inputs
+# @task_generate_log
 def get_potcar_info(element: str) -> str:
     """Retrieves POTCAR file metadata and content for a specified element.
 
@@ -184,7 +187,7 @@ def get_potcar_info(element: str) -> str:
     return titel, date_potcar, enmax, zval, content_file
 
 
-@log_generate_inputs
+@task_generate_log
 def search_potcar_files(file_map):
     """Extracts key metadata from POTCAR files using regex pattern matching.
 
@@ -272,3 +275,9 @@ def search_potcar_files(file_map):
             zval_float = float(zval_values.group(1))
 
     return string_titel, data_titel_file, enmax_float, zval_float
+
+
+if __name__ == "__main__":
+    logger = init_logger(task_name = "INCAR_INIT_WRITE", level = "INFO")
+else:
+    from loguru import logger

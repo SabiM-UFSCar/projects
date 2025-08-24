@@ -1,35 +1,46 @@
-# vasp_init/utils.py
+# common/utils.py
 """
 Simulações Ab-initio de Materiais - SAbiM
 ====================
-VASP Input Utilities
+Monochalcogenides2D Utilities
 
 Author: Marco Aurélio Murbach Teles Machado
 Email: murbach@df.ufscar.br
 Date: 08/2024
 """
 
+from datetime import datetime
 import re
 import sys
-import datetime
 from functools import wraps
 from typing import List
+from Monochalcogenides2D.common.config import TOTAL_MQ_SYSTEMS, PATH_FOLDER_LOG
 from loguru import logger
-from config import TOTAL_MQ_SYSTEMS
 
 
-logger.remove()  # Remove o handler padrão (terminal)
+def init_logger(task_name: str = "default", level: str = "INFO"):
+    path_folder_task = PATH_FOLDER_LOG.joinpath(task_name)
+    path_folder_task.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    log_filename = path_folder_task.joinpath(f"log_{timestamp}.log")
+
+    logger.remove()
+
+    logger.add(
+        log_filename,
+        rotation="150 MB",
+        retention="30 days",
+        compression="zip",
+        level=level,
+        format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}"
+    )
+
+    logger.info(f"Logger started: {log_filename}")
+    print(f"Logger started: {log_filename}")
+    return logger
 
 
-logger.add(
-    "./logs/generate_inputs.log",  # log file path
-    rotation="150 MB",  # log rotation size 
-    level="INFO",  # log level
-    format="{time:YYYY-MM-DD HH:mm:ss} | {level} | {message}"  # format string
-)
-
-
-def log_generate_inputs(func):
+def task_generate_log(func):
     """Decorator that logs function inputs, outputs, and exceptions for debugging.
 
     Wraps a function to automatically log:
@@ -56,29 +67,33 @@ def log_generate_inputs(func):
         # Logs: "Chamando função 'sample' com args=(3,), kwargs={'b': 4}"
         # Logs: "Função 'sample' retornou: 12"
     """
+
     @wraps(func)  # Preserves original function's metadata (name, docstring, etc.)
     def wrapper(*args, **kwargs):
+        if not logger._core.handlers:
+            init_logger()
         # Log entry point with all call parameters
         # Critical for debugging complex function inputs
-        logger.info(f"Chamando função '{func.__name__}' com args={args}, kwargs={kwargs}")
-        
+        logger.info(f"Call function '{func.__name__}' with args={args}, kwargs={kwargs}")
+
         try:
             # Execute wrapped function with original arguments
             result = func(*args, **kwargs)
-            
+
             # Log successful result (consider sensitivity for production)
             # Helps verify expected outputs during execution
-            logger.info(f"Função '{func.__name__}' retornou: {result}")
+            logger.info(f"Function '{func.__name__}' Return: {result}")
             return result
-        
+
         except Exception as e:
             # Log exception details while preserving stack trace
             # Critical for error diagnosis without crashing program
-            logger.error(f"Erro em '{func.__name__}': {str(e)}")
-            
+            logger.error(f"Error '{func.__name__}': {str(e)}")
+
             # Re-raise to maintain normal exception flow
             # Allows standard error handling upstream
             raise
+
     return wrapper
 
 
@@ -107,10 +122,10 @@ def get_mq_elements(mq: str) -> List[str]:
 
     chem_composition_re = re.compile(r"([A-Z][a-z]*)")
     elements = chem_composition_re.findall(mq)
-    
+
     if not elements:
         raise ValueError(f"No valid elements found in '{mq}'. Expected format like 'AlS'.")
-    
+
     return elements
 
 
@@ -151,7 +166,7 @@ def return_data_formatted_titel(string_data):
     # Critical for handling variable capitalization in input
     return_month_abb = r'([A-z]{3})'
     month_abb = re.search(return_month_abb, string_data).group(1)
-    
+
     # Convert abbreviation to numeric month using mapping
     # Enables language-agnostic month processing
     int_month = month[month_abb]
@@ -166,11 +181,12 @@ def return_data_formatted_titel(string_data):
 
     # Create datetime object from components
     # Validates date consistency (e.g., rejects invalid day-month combinations)
-    date_titel = datetime.datetime(int(year), int(int_month), int(day))
-    
+    date_titel = datetime(int(year), int(int_month), int(day))
+
     # Format as DD/MM/YYYY (zero-padded day/month)
     date_return = date_titel.strftime("%d/%m/%Y")
     return date_return
+
 
 def progress_bar_show(current_value: int):
     """Displays a dynamic terminal progress bar tracking task completion percentage.
@@ -193,31 +209,54 @@ def progress_bar_show(current_value: int):
     """
     # Base label for progress display
     text_info = 'Progress:'
-    
+
     # Fixed visual width of bar component (in characters)
     bar_width = 50
-    
+
     # Calculate completion fraction (clamped 0.0-1.0)
     # Prevents overflow/underflow from incorrect inputs
     percentage = min(1.0, max(0.0, current_value / TOTAL_MQ_SYSTEMS))
-    
+
     # Determine filled bar segments proportional to completion
     # Converts percentage to integer bar units
     filled_length = int(bar_width * percentage)
-    
+
     # Construct bar visualization: filled (#), empty (.), and numeric stats
     # Combines visual elements with precise completion metrics
     bar_string = f"{text_info} [{'#' * filled_length}{'.' * (bar_width - filled_length)}] {current_value}/{TOTAL_MQ_SYSTEMS} ({percentage:.2%})"
-    
+
     # Update current line dynamically (carriage return resets position)
     # Enables live progress animation without scrolling
     sys.stdout.write(f"\r{bar_string}")
-    
+
     # Force immediate display (bypasses output buffering)
     # Ensures real-time visibility during long operations
     sys.stdout.flush()
-    
+
     # Finalize display when reaching 100%
     # Advances cursor to new line after completion
     if current_value == TOTAL_MQ_SYSTEMS:
         print()
+
+
+
+def order_dict_by_list(dict_data: dict, order_list: list) -> dict:
+    """Orders a dictionary's keys based on a predefined list.
+
+    Args:
+        dict_data (dict): Dictionary to be ordered.
+        order_list (list): List defining the desired key order.
+
+    Returns:
+        dict: New dictionary with keys ordered according to order_list.
+              Keys not in order_list are appended at the end in original order.
+
+    Example:
+        >>> data = {'b': 2, 'a': 1, 'c': 3}
+        >>> order = ['a', 'b']
+        >>> order_dict_by_list(data, order)
+        {'a': 1, 'b': 2, 'c': 3}
+    """
+    return {key: dict_data[key] for key in order_list if key in dict_data} | {
+        key: dict_data[key] for key in dict_data if key not in order_list
+    }

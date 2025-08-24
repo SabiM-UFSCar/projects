@@ -12,11 +12,11 @@ import re
 from itertools import islice
 from pathlib import Path
 import numpy as np
-from utils import logger, log_generate_inputs
-from config import PATH_FOLDER_TEMPLATE, POSCAR_FILE_TEMPLATE, LINES_TO_MODIFY
+from Monochalcogenides2D.common.config import (PATH_FOLDER_POSCAR_PATTERN, NAME_FILE_POSCAR_PATTERN,
+                    POSCAR_LINES_TO_MODIFY)
+from Monochalcogenides2D.common.utils import task_generate_log, return_data_formatted_titel, init_logger
 
-
-@log_generate_inputs
+@task_generate_log
 def run_write_poscar(path_output_folder: str, list_elements: list, space_group: str):
     """Generates VASP POSCAR file from template with customized chemistry headers.
 
@@ -45,7 +45,7 @@ def run_write_poscar(path_output_folder: str, list_elements: list, space_group: 
     """
     # Validate template file existence before processing
     # Critical: Required for POSCAR generation workflow
-    path_poscar_template = PATH_FOLDER_TEMPLATE.joinpath(space_group, POSCAR_FILE_TEMPLATE)
+    path_poscar_template = PATH_FOLDER_POSCAR_PATTERN.joinpath(space_group, NAME_FILE_POSCAR_PATTERN)
     if not path_poscar_template.exists():
         logger.error(f"Template POSCAR not found at {path_poscar_template.resolve()}")
         raise FileNotFoundError(f"Template POSCAR not found at {path_poscar_template.resolve()}")
@@ -65,7 +65,7 @@ def run_write_poscar(path_output_folder: str, list_elements: list, space_group: 
     # Process each template line with custom modifications
     # Why: Only specific lines require element-dependent changes
     for line_num, line in enumerate(template_lines, start=1):
-        if line_num in LINES_TO_MODIFY:
+        if line_num in POSCAR_LINES_TO_MODIFY:
             # Line 1: Customize system title with element counts
             if line_num == 1:
                 # Extract numeric identifiers from template (e.g., "4" in "Na4")
@@ -101,7 +101,7 @@ def run_write_poscar(path_output_folder: str, list_elements: list, space_group: 
 
     return False
 
-@log_generate_inputs
+@task_generate_log
 def read_poscar_vectors(path_poscar: Path):
     """Reads lattice vectors and scaling parameters from a VASP POSCAR file.
 
@@ -149,3 +149,9 @@ def read_poscar_vectors(path_poscar: Path):
         # Wrap low-level errors with context about parsing failure
         except Exception as e:
             raise ValueError(f"Error reading POSCAR vectors: {str(e)}") from e
+
+
+if __name__ == "__main__":
+    logger = init_logger(task_name = "POSCAR_INIT_WRITE", level = "INFO")
+else:
+    from loguru import logger
