@@ -4,7 +4,6 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "Monochalcogenides-2D"
-version = "0.1.0"
 description = "Computational tools for VASP-based simulations and analysis of 2D monochalcogenides."
 
 authors = [
