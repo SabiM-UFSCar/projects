@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel", "setuptools-scm[toml]>=6.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "Monochalcogenides-2D"
+version = "0.1.0"
+description = "Computational tools for VASP-based simulations and analysis of 2D monochalcogenides."
+
+authors = [
+  { name="Marco Aurélio Murbach Teles Machado", email="murbach@df.ufscar.br" }
+]
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "../../LICENSE" }
+keywords = ["VASP", "2D materials", "monochalcogenides", "DFT", "materials science"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Physics",
+]
+
+[tool.setuptools-scm]
+version_scheme = "guess-next-dev"
+local_scheme = "node-and-date"
+root = "."
+relative_to = "pyproject.toml"
+
+[tool.setuptools.package-data]
+Monochalcogenides2D = ["src/Monochalcogenides2D/templates/*"]
+
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
