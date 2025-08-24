@@ -16,9 +16,7 @@ from functools import wraps
 from typing import List
 from Monochalcogenides2D.common.config import TOTAL_MQ_SYSTEMS, PATH_FOLDER_LOG
 from loguru import logger
-import Monochalcogenides2D as mp
 
-print(mp.__version__)
 
 def init_logger(task_name: str = "default", level: str = "INFO"):
     path_folder_task = PATH_FOLDER_LOG.joinpath(task_name)
