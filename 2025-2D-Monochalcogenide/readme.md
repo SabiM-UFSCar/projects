@@ -9,7 +9,7 @@
 
 ## 📁 [Machine Learning Correlation Analysis](2025-2D-Monochalcogenide/MachineLearningCorrelations)
 
-### 📋 Contents
+### Contents
 
 This folder contains the code and analysis related to Section 4 of the manuscript, "Bridging Text Mining and Quantum Simulations for the Design of 2D Monochalcogenide Materials.”,  and focuses on the machine learning portion of the study, where we analyze a comprehensive dataset of physicochemical properties to identify the most significant descriptors for material stability.
 
@@ -53,4 +53,4 @@ Open and run the ML_correlation_analysis.ipynb notebook in a Jupyter environment
 
 ### Citation
 If you use this code or the findings from our study in your research, please cite our manuscript:
-M. B. P. Querne, M. A. M. T. Machado, R. C. Prati, N. M. Regis, M. P. Lima, and J. L. F. Da Silva, "Bridging Text Mining and Quantum Simulations for the Design of 2D Monochalcogenide Materials," [Journal Name], [Year], [Volume], [Page Numbers]. (Please update with actual publication details)
+M. B. P. Querne, M. A. M. T. Machado, R. C. Prati, N. M. Regis, M. P. Lima, and J. L. F. Da Silva, "Bridging Text Mining and Quantum Simulations for the Design of 2D Monochalcogenide Materials,"
