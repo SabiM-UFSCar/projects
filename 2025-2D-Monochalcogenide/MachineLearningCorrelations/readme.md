@@ -42,4 +42,4 @@ Open and run the ML_correlation_analysis.ipynb notebook in a Jupyter environment
 
 ## Citation
 If you use this code or the findings from our study in your research, please cite our manuscript:
-M. B. P. Querne, M. A. M. T. Machado, R. C. Prati, N. M. Regis, M. P. Lima, and J. L. F. Da Silva, "Bridging Text Mining and Quantum Simulations for the Design of 2D Monochalcogenide Materials," [Journal Name], [Year], [Volume], [Page Numbers]. (Please update with actual publication details)
+M. B. P. Querne, M. A. M. T. Machado, R. C. Prati, N. M. Regis, M. P. Lima, and J. L. F. Da Silva, "Bridging Text Mining and Quantum Simulations for the Design of 2D Monochalcogenide Materials," 
